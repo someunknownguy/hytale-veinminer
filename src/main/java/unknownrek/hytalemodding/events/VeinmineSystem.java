@@ -70,6 +70,8 @@ public class VeinmineSystem extends EntityEventSystem<EntityStore, BreakBlockEve
         List<Vector3i> buffer = new ArrayList<>(maxBlocks),
                 recent = new ArrayList<>(maxBlocks);
         recent.add(startPos);
+        // Needed so we don't double break the starting block
+        blocksToBreak.add(startPos);
 
         //Credit on actual algorithm to: https://github.com/2008Choco/VeinMiner/blob/master/veinminer-bukkit/src/main/java/wtf/choco/veinminer/pattern/VeinMiningPatternDefault.java
         while (blocksToBreak.size() < maxBlocks) {
@@ -100,6 +102,9 @@ public class VeinmineSystem extends EntityEventSystem<EntityStore, BreakBlockEve
             blocksToBreak.addAll(buffer);
             buffer.clear();
         }
+
+        //already handled by this event, don't need to trigger again
+        blocksToBreak.remove(startPos);
 
         var chunkStore = world.getChunkStore();
 
