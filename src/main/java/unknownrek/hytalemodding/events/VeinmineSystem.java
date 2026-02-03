@@ -71,6 +71,7 @@ public class VeinmineSystem extends EntityEventSystem<EntityStore, BreakBlockEve
                 recent = new ArrayList<>(maxBlocks);
         recent.add(startPos);
 
+        //Credit on actual algorithm to: https://github.com/2008Choco/VeinMiner/blob/master/veinminer-bukkit/src/main/java/wtf/choco/veinminer/pattern/VeinMiningPatternDefault.java
         while (blocksToBreak.size() < maxBlocks) {
             recentSearch:
             for(Vector3i b : recent) {

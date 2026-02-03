@@ -1,19 +1,23 @@
 # hytale-veinminer
 Permission driven veinminer for Hytale
 
+Crouch to veinmine 
+
+## Useful information for admins and personal use
+
 Grant players permission 
     
     unknownrek.hytalemodding.veinmine.allowed
 
 Or if you're not interest in that at all, change the mod config
 
-    "LockedBehindPermission": true,
+    "LockedBehindPermission": false
 
 and they will be able to veinmine using the tools you config while breaking the blocks you config
 
 whitelist matching is case insensitive
 
-Example config to be able to veinmine while holding any pickaxe and any hatchet
+Example config to be able to veinmine while holding any pickaxe or any hatchet
 
     "WhitelistHeldItemIds": [
         "Tool_Pickaxe_*",
