@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>unknownrek.hytalemodding</groupId>
-    <artifactId>veinmine</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <artifactId>veinminer-perms</artifactId>
+    <version>1.2</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
