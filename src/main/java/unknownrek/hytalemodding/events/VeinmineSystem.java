@@ -49,19 +49,21 @@ public class VeinmineSystem extends EntityEventSystem<EntityStore, BreakBlockEve
             return;
         }
 
+        var startBlockType = breakBlockEvent.getBlockType();
+
+        var heldItem = breakBlockEvent.getItemInHand();
+        if (heldItem == null || heldItem.equals(ItemStack.EMPTY)
+                // For some reason BreakBlockEvent triggers on placing items, and blockType is EMPTY, so cut it short there.
+                || startBlockType.equals(BlockType.EMPTY)) {
+            return;
+        }
+
         // Check user is crouching
         var movementStatesComponent = store.getComponent(playerRef, MovementStatesComponent.getComponentType());
         if(movementStatesComponent == null
                 || movementStatesComponent.getMovementStates() == null
                 || !isCrouching(movementStatesComponent.getMovementStates())
         ) {
-            return;
-        }
-
-        var startBlockType = breakBlockEvent.getBlockType();
-
-        var heldItem = breakBlockEvent.getItemInHand();
-        if (heldItem == null || heldItem.equals(ItemStack.EMPTY) || startBlockType.equals(BlockType.EMPTY)) {
             return;
         }
 
