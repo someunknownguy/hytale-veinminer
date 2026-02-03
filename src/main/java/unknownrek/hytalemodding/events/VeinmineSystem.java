@@ -5,10 +5,13 @@ import com.hypixel.hytale.component.query.Query;
 import com.hypixel.hytale.component.system.EntityEventSystem;
 import com.hypixel.hytale.math.util.ChunkUtil;
 import com.hypixel.hytale.math.vector.Vector3i;
+import com.hypixel.hytale.protocol.MovementStates;
 import com.hypixel.hytale.server.core.asset.type.blocktype.config.BlockType;
+import com.hypixel.hytale.server.core.entity.movement.MovementStatesComponent;
 import com.hypixel.hytale.server.core.event.events.ecs.BreakBlockEvent;
 import com.hypixel.hytale.server.core.inventory.ItemStack;
 import com.hypixel.hytale.server.core.modules.interaction.BlockHarvestUtils;
+import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.chunk.WorldChunk;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import unknownrek.hytalemodding.Veinmine;
@@ -41,7 +44,17 @@ public class VeinmineSystem extends EntityEventSystem<EntityStore, BreakBlockEve
         LOGGER.atFine().log("Handling BreakBlockEvent");
         Ref<EntityStore> playerRef = archetypeChunk.getReferenceTo(i);
         VeinmineAbleComponent comp = store.getComponent(playerRef, VeinmineAbleComponent.getComponentType());
-        if(comp == null || comp.isOnCooldown() || !comp.isEnabled()) {
+        // Check veinminer is not on cooldown
+        if(comp == null || comp.isOnCooldown()) {
+            return;
+        }
+
+        // Check user is crouching
+        var movementStatesComponent = store.getComponent(playerRef, MovementStatesComponent.getComponentType());
+        if(movementStatesComponent == null
+                || movementStatesComponent.getMovementStates() == null
+                || !isCrouching(movementStatesComponent.getMovementStates())
+        ) {
             return;
         }
 
@@ -135,6 +148,11 @@ public class VeinmineSystem extends EntityEventSystem<EntityStore, BreakBlockEve
     @Nullable
     @Override
     public Query<EntityStore> getQuery() {
-        return Query.and(VeinmineAbleComponent.getComponentType());
+        return Query.and(PlayerRef.getComponentType(), VeinmineAbleComponent.getComponentType(), MovementStatesComponent.getComponentType());
     }
+
+    private static boolean isCrouching(MovementStates states) {
+        return states.crouching || states.forcedCrouching;
+    }
+
 }

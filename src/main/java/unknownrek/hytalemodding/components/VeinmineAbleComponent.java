@@ -12,7 +12,6 @@ public class VeinmineAbleComponent implements Component<EntityStore> {
     private static final float COOLDOWN = 0.5f;
 
     private float currentCooldown = 0f;
-    private boolean isEnabled = false;
 
     private static ComponentType<EntityStore, VeinmineAbleComponent> type;
 
@@ -51,15 +50,4 @@ public class VeinmineAbleComponent implements Component<EntityStore> {
         return currentCooldown > 0.0f;
     }
 
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void enable() {
-        isEnabled = true;
-    }
-
-    public void disable() {
-        isEnabled = false;
-    }
 }
