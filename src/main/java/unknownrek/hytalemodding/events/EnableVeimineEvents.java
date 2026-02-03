@@ -30,7 +30,6 @@ public class EnableVeimineEvents {
      * Similarly, if player lost perms while offline, remove it
      */
     public void onPlayerReady(PlayerReadyEvent event) {
-        event.getPlayer().sendMessage(Message.raw("Howdy PlayerReadyEvent"));
         if(event.getPlayer().getWorld() == null) {
             Veinmine.LOGGER.atWarning().log("onPlayerReadyEvent fired without player existing in world yet");
             return;

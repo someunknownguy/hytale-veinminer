@@ -6,7 +6,7 @@
 
     <groupId>unknownrek.hytalemodding</groupId>
     <artifactId>veinminer-perms</artifactId>
-    <version>1.2</version>
+    <version>1.3</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
