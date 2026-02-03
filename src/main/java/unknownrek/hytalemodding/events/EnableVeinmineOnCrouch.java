@@ -48,8 +48,8 @@ public class EnableVeinmineOnCrouch extends DelayedEntitySystem<EntityStore> {
                     !PermissionsModule.get().hasPermission(playerRef.getUuid(), plugin.PERM)) {
                 if(comp != null) {
                     store.removeComponentIfExists(ref, VeinmineAbleComponent.getComponentType());
-                    return;
                 }
+                return;
             }
 
             var movementStatesComponent = store.getComponent(ref, MovementStatesComponent.getComponentType());

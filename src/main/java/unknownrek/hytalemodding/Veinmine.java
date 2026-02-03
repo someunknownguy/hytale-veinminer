@@ -27,7 +27,7 @@ public class Veinmine extends JavaPlugin {
 
     @Override
     protected void setup() {
-        LOGGER.atInfo().log("Loading ModularVeinmine");
+        LOGGER.atInfo().log("Loading Veinmine");
         config.save();
         var commandReg = this.getCommandRegistry();
         var eventReg = this.getEventRegistry();
@@ -42,7 +42,7 @@ public class Veinmine extends JavaPlugin {
         ecsEventReg.registerSystem(new VeinmineCooldownSystem());
 
         PERM = this.getBasePermission() + ".allowed";
-        LOGGER.atInfo().log("Finished loading ModularVeinmine");
+        LOGGER.atInfo().log("Finished loading Veinmine");
     }
 
 
