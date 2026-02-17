@@ -1,7 +1,6 @@
 package unknownrek.hytalemodding.events;
 
 import com.hypixel.hytale.component.Ref;
-import com.hypixel.hytale.server.core.Message;
 import com.hypixel.hytale.server.core.event.events.permissions.PlayerPermissionChangeEvent;
 import com.hypixel.hytale.server.core.event.events.player.PlayerReadyEvent;
 import com.hypixel.hytale.server.core.permissions.PermissionsModule;
@@ -14,6 +13,7 @@ import unknownrek.hytalemodding.components.VeinmineAbleComponent;
 
 import java.util.Set;
 import java.util.UUID;
+import static unknownrek.hytalemodding.Veinmine.LOGGER;
 
 public class EnableVeimineEvents {
 
@@ -30,14 +30,20 @@ public class EnableVeimineEvents {
      * Similarly, if player lost perms while offline, remove it
      */
     public void onPlayerReady(PlayerReadyEvent event) {
+        if(!permEnabled()) {
+            return;
+        }
+        LOGGER.atFinest().log("PlayerReadyEvent detected, checking if player has perms");
         if(event.getPlayer().getWorld() == null) {
-            Veinmine.LOGGER.atWarning().log("onPlayerReadyEvent fired without player existing in world yet");
+            LOGGER.atWarning().log("PlayerReadyEvent fired without player existing in world yet");
             return;
         }
 
         if(hasPerm(event.getPlayer().getWorld(), event.getPlayerRef())) {
+            LOGGER.atFine().log("Player %s has required perms, attempting to enable veinmine", event.getPlayer().getDisplayName());
             giveComp(event.getPlayer().getWorld(), event.getPlayerRef());
         } else {
+            LOGGER.atFine().log("Player %s does not have required perms, attempting to disable veinmine", event.getPlayer().getDisplayName());
             removeComp(event.getPlayer().getWorld(), event.getPlayerRef());
         }
     }
@@ -46,6 +52,7 @@ public class EnableVeimineEvents {
         if(!permEnabled()) {
             return;
         }
+        LOGGER.atFinest().log("PermissionsAdded event detected, checking if player was granted veinmine perms");
 
         if(checkPermissionInGroup(event.getAddedPermissions())){
             Veinmine.LOGGER.atFine().log("Found player " + event.getPlayerUuid() + " was given veinmine perm, attempting to apply component");
@@ -64,6 +71,8 @@ public class EnableVeimineEvents {
         if(!permEnabled()) {
             return;
         }
+        LOGGER.atFinest().log("PermissionsRemoved event detected, checking if player was stripped of veinmine perms");
+
         if(checkPermissionInGroup(event.getRemovedPermissions())){
             Veinmine.LOGGER.atFine().log("Found player " + event.getPlayerUuid() + " has veinmine perm removed, attempting to remove component");
             PlayerRef playerRef = Universe.get().getPlayer(event.getPlayerUuid());
@@ -79,13 +88,14 @@ public class EnableVeimineEvents {
     }
 
     public void onGroupAdded(PlayerPermissionChangeEvent.GroupAdded event) {
-
         if(!permEnabled()) {
             return;
         }
+        LOGGER.atFinest().log("GroupAdded event detected, checking if player was granted veinmine perms");
+
         var permsInGroup = PermissionsModule.get().getFirstPermissionProvider().getGroupPermissions(event.getGroupName());
         if(checkPermissionInGroup(permsInGroup)){
-            Veinmine.LOGGER.atFine().log("Found player " + event.getPlayerUuid() + " was given veinmine perm, attempting to apply component");
+            Veinmine.LOGGER.atFine().log("Found player " + event.getPlayerUuid() + " was given veinmine perm via group, attempting to apply component");
             PlayerRef playerRef = Universe.get().getPlayer(event.getPlayerUuid());
             if(playerRef == null || !playerRef.isValid() || playerRef.getReference() == null
                     || !playerRef.getReference().isValid()) {
@@ -102,6 +112,8 @@ public class EnableVeimineEvents {
         if(!permEnabled()) {
             return;
         }
+        LOGGER.atFinest().log("GroupRemoved event detected, checking if player was granted veinmine perms");
+
         var permsInGroup = PermissionsModule.get().getFirstPermissionProvider().getGroupPermissions(event.getGroupName());
         if(checkPermissionInGroup(permsInGroup)){
             Veinmine.LOGGER.atFine().log("Found player " + event.getPlayerUuid() + " had veinmine perm removed, attempting to apply component");
@@ -120,7 +132,6 @@ public class EnableVeimineEvents {
 
     private void giveComp(World world, Ref<EntityStore> ref) {
         var store = world.getEntityStore().getStore();
-
             world.execute(() -> {
                 if (store.getComponent(ref, VeinmineAbleComponent.getComponentType()) == null) {
                     store.addComponent(ref, VeinmineAbleComponent.getComponentType());

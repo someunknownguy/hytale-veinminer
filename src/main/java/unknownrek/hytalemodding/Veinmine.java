@@ -54,8 +54,8 @@ public class Veinmine extends JavaPlugin {
         eventReg.registerGlobal(PlayerPermissionChangeEvent.PermissionsAdded.class, eventHandlers::onPermissionAdded);
         eventReg.registerGlobal(PlayerPermissionChangeEvent.PermissionsRemoved.class, eventHandlers::onPermissionRemoved);
         // These appear to be dead events at the moment...
-//        eventReg.registerGlobal(PlayerPermissionChangeEvent.GroupAdded.class, eventHandlers::onGroupAdded);
-//        eventReg.registerGlobal(PlayerPermissionChangeEvent.GroupRemoved.class, eventHandlers::onGroupRemoved);
+        eventReg.registerGlobal(PlayerPermissionChangeEvent.GroupAdded.class, eventHandlers::onGroupAdded);
+        eventReg.registerGlobal(PlayerPermissionChangeEvent.GroupRemoved.class, eventHandlers::onGroupRemoved);
     }
 
     private void setupEcs() {
